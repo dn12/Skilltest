@@ -1,5 +1,7 @@
 package net.adiwilaga.skilltest;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import net.adiwilaga.skilltest.api.apitv;
+import net.adiwilaga.skilltest.model.tv;
+
+import java.util.List;
+
+public class MainActivity extends Activity {
+
+    String baseurl="http://tv.adiwilaga.net";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +35,43 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this,"Hai apa kabar?",Toast.LENGTH_LONG).show();
-                System.out.println("test :D");
-                Log.e("dna", "hai");
-                Log.d("dna","hai d");
+
+                Log.i("dna", "Requesting API");
+
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint(baseurl).build();
+                apitv tvapi = restAdapter.create(apitv.class);
+
+                tvapi.gettv("1",new Callback<List<tv>>() {
+                    @Override
+                    public void success(List<tv> tvs, Response response) {
+                        for(tv tipi : tvs){
+                            tipi.save();
+                            Log.i("tipilist",tipi.getName() + " saved");
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("erorr",error.getMessage());
+                    }
+                });
+
+
             }
+
+
+
+
         });
+
+
+        List<tv> tvs= tv.getAll();
+        Log.i("tipidbcount", Integer.toString(tvs.size()));
+        for(tv tipi:tvs){
+
+            Log.i("tipidb",tipi.getName());
+        }
     }
 
     @Override
