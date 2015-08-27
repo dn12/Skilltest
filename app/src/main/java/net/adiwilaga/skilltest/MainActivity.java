@@ -1,6 +1,7 @@
 package net.adiwilaga.skilltest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,28 +35,33 @@ public class MainActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Hai apa kabar?",Toast.LENGTH_LONG).show();
 
-                Log.i("dna", "Requesting API");
 
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint(baseurl).build();
-                apitv tvapi = restAdapter.create(apitv.class);
+//                Toast.makeText(MainActivity.this,"Hai apa kabar?",Toast.LENGTH_LONG).show();
+//
+//                Log.i("dna", "Requesting API");
+//
+//                RestAdapter restAdapter = new RestAdapter.Builder()
+//                        .setEndpoint(baseurl).build();
+//                apitv tvapi = restAdapter.create(apitv.class);
+//
+//                tvapi.gettv("1",new Callback<List<tv>>() {
+//                    @Override
+//                    public void success(List<tv> tvs, Response response) {
+//                        for(tv tipi : tvs){
+//                            tipi.save();
+//                            Log.i("tipilist",tipi.getName() + " saved");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void failure(RetrofitError error) {
+//                        Log.e("erorr",error.getMessage());
+//                    }
+//                });
 
-                tvapi.gettv("1",new Callback<List<tv>>() {
-                    @Override
-                    public void success(List<tv> tvs, Response response) {
-                        for(tv tipi : tvs){
-                            tipi.save();
-                            Log.i("tipilist",tipi.getName() + " saved");
-                        }
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e("erorr",error.getMessage());
-                    }
-                });
+                Intent ii = new Intent(MainActivity.this,LoginFBActivity.class);
+                startActivity(ii);
 
 
             }
