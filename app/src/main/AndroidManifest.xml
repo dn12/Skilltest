@@ -13,7 +13,7 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="net.adiwilaga.skilltest.model.tv" />
+            android:value="net.adiwilaga.skilltest.model.statusmodel, net.adiwilaga.skilltest.model.tv " />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
@@ -45,7 +45,10 @@
             android:name=".LoginFBActivity"
             android:label="@string/title_activity_login_fb" >
         </activity>
-
+        <activity
+            android:name=".LangitPagesActivity"
+            android:label="@string/title_activity_langit_pages" >
+        </activity>
     </application>
 
 </manifest>

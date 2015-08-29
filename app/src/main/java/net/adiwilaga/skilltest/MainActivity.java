@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import net.adiwilaga.skilltest.api.apitv;
+import net.adiwilaga.skilltest.model.statusmodel;
 import net.adiwilaga.skilltest.model.tv;
 
 import java.util.List;
@@ -30,6 +33,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -72,12 +76,11 @@ public class MainActivity extends Activity {
         });
 
 
-        List<tv> tvs= tv.getAll();
-        Log.i("tipidbcount", Integer.toString(tvs.size()));
-        for(tv tipi:tvs){
-
-            Log.i("tipidb",tipi.getName());
-        }
+//        List<statusmodel> lst= statusmodel.getAll();
+//        Log.i("statuscount", Integer.toString(lst.size()));
+//        for(statusmodel st : lst) {
+//            Log.i("ltsdb",st.getName());
+//        }
     }
 
     @Override

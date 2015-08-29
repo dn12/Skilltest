@@ -35,13 +35,15 @@
             android:id="@+id/tt"
             android:layout_alignTop="@+id/imageView"
             android:layout_toRightOf="@+id/imageView"
-            android:layout_toEndOf="@+id/imageView" />
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_margin="5dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -89,8 +91,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Share"
-            android:id="@+id/Sharebtn" />
+            android:id="@+id/Sharebtn"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="7Langit Pages"
+        android:id="@+id/TLPageBtn"
+        android:layout_marginTop="20dp" />
 
 
 </LinearLayout>

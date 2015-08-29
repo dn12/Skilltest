@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,25 +27,18 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class LoginFBActivityFragment extends Fragment {
 
 
     private CallbackManager callbackManager;
+    private CallbackManager callbackManager1;
     ShareDialog shareDialog;
 
     private TextView textView;
@@ -74,10 +67,14 @@ public class LoginFBActivityFragment extends Fragment {
         FacebookSdk.sdkInitialize(getContext());
 
         callbackManager = CallbackManager.Factory.create();
+        callbackManager1 = CallbackManager.Factory.create();
 
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
+//                if(newToken==null){
+//
+//                }
 
             }
         };
@@ -86,11 +83,14 @@ public class LoginFBActivityFragment extends Fragment {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 displayMessage(newProfile);
+
             }
         };
 
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
+
+
 
     }
 
@@ -107,8 +107,6 @@ public class LoginFBActivityFragment extends Fragment {
         loginButton.registerCallback(callbackManager, callback);
 
 
-        shareDialog = new ShareDialog(this);
-        shareDialog.registerCallback(callbackManager, sharecallback);
 
         sharetext= (EditText) view.findViewById(R.id.sharetext);
         sharelink= (EditText) view.findViewById(R.id.sharelink);
@@ -119,15 +117,35 @@ public class LoginFBActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //share dialog here
-                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                    ShareLinkContent content = new ShareLinkContent.Builder()
-                            .setContentUrl(Uri.parse(sharelink.getText().toString()))
-                            .setContentTitle(sharetitle.getText().toString())
-                            .setContentDescription(sharetext.getText().toString())
-                            .build();
 
-                    ShareDialog.show(getActivity(),content);
+                if(AccessToken.getCurrentAccessToken()!=null) {
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse(sharelink.getText().toString()))
+                                .setContentTitle(sharetitle.getText().toString())
+                                .setContentDescription(sharetext.getText().toString())
+                                .build();
 
+                        ShareDialog.show(getActivity(), content);
+
+                    }
+                }else{
+                    Toast.makeText(getContext(),"Please Login First!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+
+        Button tlpagebtn= (Button) view.findViewById(R.id.TLPageBtn);
+        tlpagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(AccessToken.getCurrentAccessToken()!=null) {
+                    Intent ii= new Intent(getActivity(),LangitPagesActivity.class);
+                    startActivity(ii);
+                }else{
+                    Toast.makeText(getContext(),"Please Login First!",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -137,9 +155,10 @@ public class LoginFBActivityFragment extends Fragment {
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
-            AccessToken accessToken = loginResult.getAccessToken();
+            //AccessToken accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
             displayMessage(profile);
+            Toast.makeText(getActivity(), "Login Successfully",Toast.LENGTH_LONG ).show();
         }
 
         @Override
@@ -149,30 +168,31 @@ public class LoginFBActivityFragment extends Fragment {
 
         @Override
         public void onError(FacebookException e) {
-
+            Toast.makeText(getActivity(), e.getMessage(),Toast.LENGTH_LONG ).show();
         }
     };
 
-    private FacebookCallback<Sharer.Result> sharecallback = new FacebookCallback<Sharer.Result>() {
-        @Override
-        public void onSuccess(Sharer.Result result) {
-            Toast.makeText(getActivity(), "Content Successfully Posted",Toast.LENGTH_LONG ).show();
-            sharetext.setText("");
-            sharetitle.setText("");
-            sharelink.setText("");
-
-        }
-
-        @Override
-        public void onCancel() {
-
-        }
-
-        @Override
-        public void onError(FacebookException e) {
-
-        }
-    };
+//    private FacebookCallback<Sharer.Result> sharecallback = new FacebookCallback<Sharer.Result>() {
+//        @Override
+//        public void onSuccess(Sharer.Result result) {
+//            Toast.makeText(getActivity(), "Content Successfully Posted",Toast.LENGTH_LONG ).show();
+//            sharetext.setText("");
+//            sharetitle.setText("");
+//            sharelink.setText("");
+//
+//        }
+//
+//        @Override
+//        public void onCancel() {
+//
+//
+//        }
+//
+//        @Override
+//        public void onError(FacebookException e) {
+//            Toast.makeText(getActivity(), e.getMessage(),Toast.LENGTH_LONG ).show();
+//        }
+//    };
 
 
 
@@ -180,14 +200,18 @@ public class LoginFBActivityFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
+        callbackManager1.onActivityResult(requestCode, resultCode, data);
+        Log.e("result",data.getExtras().toString());
     }
 
     private void displayMessage(Profile profile) {
         if (profile != null) {
             textView.setText(profile.getName());
-            setImagebyURL(profilepicturre, profile.getProfilePictureUri(96, 96).toString());;
+            setImagebyURL(profilepicturre, profile.getProfilePictureUri(96, 96).toString());
             Log.d("profile", profile.getProfilePictureUri(96, 96).toString());
+        }else{
+            textView.setText("Please Login");
+            profilepicturre.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         }
     }
 
@@ -228,11 +252,7 @@ public class LoginFBActivityFragment extends Fragment {
                     }
                 });
 
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 

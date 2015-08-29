@@ -3,7 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_login_fb">LoginFBActivity</string>
+    <string name="title_activity_login_fb">Facebook Login</string>
 
     <string name="app_id">221278801249561</string>
+    <string name="title_activity_langit_pages">7Langit Pages</string>
 </resources>

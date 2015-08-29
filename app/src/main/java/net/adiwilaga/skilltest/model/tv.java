@@ -3,6 +3,7 @@ package net.adiwilaga.skilltest.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
 
@@ -56,6 +57,13 @@ public class tv extends Model{
 
     public static List<tv> getAll() {
         return new Select()
+                .from(tv.class)
+                .execute();
+    }
+
+    public static void Clean(){
+
+        new Delete()
                 .from(tv.class)
                 .execute();
     }
