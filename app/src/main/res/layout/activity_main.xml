@@ -13,4 +13,11 @@
         android:id="@+id/button"
         android:textSize="20dp" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google Plus"
+        android:id="@+id/button2"
+        android:textSize="20dp" />
+
 </LinearLayout>

@@ -64,7 +64,7 @@ public class LoginFBActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getContext());
+        FacebookSdk.sdkInitialize(getActivity());
 
         callbackManager = CallbackManager.Factory.create();
         callbackManager1 = CallbackManager.Factory.create();
@@ -130,7 +130,7 @@ public class LoginFBActivityFragment extends Fragment {
 
                     }
                 }else{
-                    Toast.makeText(getContext(),"Please Login First!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Please Login First!",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -145,7 +145,7 @@ public class LoginFBActivityFragment extends Fragment {
                     Intent ii= new Intent(getActivity(),LangitPagesActivity.class);
                     startActivity(ii);
                 }else{
-                    Toast.makeText(getContext(),"Please Login First!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Please Login First!",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -229,7 +229,7 @@ public class LoginFBActivityFragment extends Fragment {
         displayMessage(profile);
     }
 
-    public void setImagebyURL(final ImageView iv, final String rl) {
+    static void setImagebyURL(final ImageView iv, final String rl) {
 
 
     final Handler hand = new Handler();

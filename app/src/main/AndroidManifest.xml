@@ -3,8 +3,17 @@
     package="net.adiwilaga.skilltest" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
-    <application android:name=".skilltest" >
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="16" />
+
+    <application android:name=".skilltest"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
         <meta-data
             android:name="AA_DB_NAME"
             android:value="dna.db" />
@@ -17,10 +26,11 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+
+
+
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -48,6 +58,10 @@
         <activity
             android:name=".LangitPagesActivity"
             android:label="@string/title_activity_langit_pages" >
+        </activity>
+        <activity
+            android:name=".LoginGPlusActivity"
+            android:label="@string/title_activity_login_gplus" >
         </activity>
     </application>
 

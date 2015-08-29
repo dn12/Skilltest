@@ -40,40 +40,27 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-
-//                Toast.makeText(MainActivity.this,"Hai apa kabar?",Toast.LENGTH_LONG).show();
-//
-//                Log.i("dna", "Requesting API");
-//
-//                RestAdapter restAdapter = new RestAdapter.Builder()
-//                        .setEndpoint(baseurl).build();
-//                apitv tvapi = restAdapter.create(apitv.class);
-//
-//                tvapi.gettv("1",new Callback<List<tv>>() {
-//                    @Override
-//                    public void success(List<tv> tvs, Response response) {
-//                        for(tv tipi : tvs){
-//                            tipi.save();
-//                            Log.i("tipilist",tipi.getName() + " saved");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void failure(RetrofitError error) {
-//                        Log.e("erorr",error.getMessage());
-//                    }
-//                });
-
-                Intent ii = new Intent(MainActivity.this,LoginFBActivity.class);
+                Intent ii = new Intent(MainActivity.this, LoginFBActivity.class);
                 startActivity(ii);
 
 
             }
-
-
-
-
         });
+
+
+        Button btn1 = (Button) findViewById(R.id.button2);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent ii = new Intent(MainActivity.this,LoginGPlusActivity.class);
+                startActivity(ii);
+
+
+            }
+        });
+
+
 
 
 //        List<statusmodel> lst= statusmodel.getAll();

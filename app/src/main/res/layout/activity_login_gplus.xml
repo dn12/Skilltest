@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="net.adiwilaga.skilltest.LoginGPlusActivity"
+    android:orientation="vertical">
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:id="@+id/ppimg"
+            android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Please Login"
+                android:id="@+id/nametext"
+                android:layout_margin="5dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:id="@+id/signoutbtn"
+                android:background="@drawable/common_signin_btn_text_normal_dark"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

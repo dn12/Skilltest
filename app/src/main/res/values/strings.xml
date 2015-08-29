@@ -7,4 +7,5 @@
 
     <string name="app_id">221278801249561</string>
     <string name="title_activity_langit_pages">7Langit Pages</string>
+    <string name="title_activity_login_gplus">LoginGPlusActivity</string>
 </resources>
