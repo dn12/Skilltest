@@ -45,6 +45,7 @@
             android:name=".LoginFBActivity"
             android:label="@string/title_activity_login_fb" >
         </activity>
+
     </application>
 
 </manifest>
