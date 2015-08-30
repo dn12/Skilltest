@@ -2,6 +2,7 @@ package net.adiwilaga.skilltest;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
@@ -18,6 +21,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
 
 public class LoginGPlusActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -25,6 +29,7 @@ public class LoginGPlusActivity extends AppCompatActivity implements GoogleApiCl
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
+    private static final int RC_SHARE = 1;
     private static final String TAG = "Google";
 
     /* Client used to interact with Google APIs. */
@@ -85,6 +90,26 @@ public class LoginGPlusActivity extends AppCompatActivity implements GoogleApiCl
 
         nameText= (TextView) findViewById(R.id.nametext);
         ppImage= (ImageView) findViewById(R.id.ppimg);
+
+
+        final EditText sharetext= (EditText) findViewById(R.id.sharetext);
+        final EditText sharelink= (EditText) findViewById(R.id.sharelink);
+
+
+        Button shareBtn= (Button) findViewById(R.id.sharebtn);
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new PlusShare.Builder(getApplicationContext())
+                        .setType("text/plain")
+                        .setText(sharetext.getText().toString())
+                        .setContentUrl(Uri.parse(sharelink.getText().toString()))
+                        .getIntent();
+
+                startActivityForResult(shareIntent, RC_SHARE);
+            }
+        });
+
     }
 
     private void onSignInClicked() {
@@ -205,6 +230,14 @@ public class LoginGPlusActivity extends AppCompatActivity implements GoogleApiCl
 
             mIsResolving = false;
             mGoogleApiClient.connect();
+        }else if(requestCode==RC_SHARE){
+            if(resultCode==RESULT_OK){
+                Toast.makeText(getApplicationContext(),"Content Post Successfully",Toast.LENGTH_LONG).show();
+            }else if(resultCode==RESULT_CANCELED){
+
+            }else{
+                Toast.makeText(getApplicationContext(),"Sorry, Connection or Login Sesion in Trouble",Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
