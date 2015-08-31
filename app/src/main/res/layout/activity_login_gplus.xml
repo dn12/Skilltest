@@ -5,7 +5,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="net.adiwilaga.skilltest.LoginGPlusActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#dedede">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -85,9 +86,11 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="Share"
             android:id="@+id/sharebtn"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="#ff1e16"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </LinearLayout>

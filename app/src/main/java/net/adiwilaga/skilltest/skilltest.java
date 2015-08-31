@@ -19,7 +19,7 @@ public class skilltest extends com.activeandroid.app.Application {
     public void onCreate()
     {
         super.onCreate();
-        printHashKey();
+        //printHashKey();
     }
 
 

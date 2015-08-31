@@ -1,6 +1,7 @@
 package net.adiwilaga.skilltest;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,8 @@ import com.facebook.HttpMethod;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import net.adiwilaga.skilltest.api.fbAPI;
+import net.adiwilaga.skilltest.model.data;
 import net.adiwilaga.skilltest.model.statusmodel;
 
 import org.json.JSONArray;
@@ -43,8 +46,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.android.AndroidLog;
+import retrofit.client.Response;
+import retrofit.http.Path;
+import retrofit.http.Query;
+
 public class LangitPagesActivity extends Activity {
 
+    String GRAPHURL="https://graph.facebook.com";
     ArrayList<statusmodel> statusList = null;
     statusAdapter m_adapter;
     ListView ls;
@@ -52,6 +64,7 @@ public class LangitPagesActivity extends Activity {
 
     statusmodel st;
 
+    ProgressDialog pp;
 
     Handler hand;
     @Override
@@ -59,9 +72,12 @@ public class LangitPagesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_langit_pages);
 
-        hand= new Handler();
 
-        ls=(ListView)findViewById(R.id.listView);
+        pp= new ProgressDialog(this);
+
+        hand = new Handler();
+
+        ls = (ListView) findViewById(R.id.listView);
 
 
         statusList = new ArrayList<statusmodel>();
@@ -69,17 +85,17 @@ public class LangitPagesActivity extends Activity {
         ls.setAdapter(this.m_adapter);
 
 
-        List<statusmodel> st= statusmodel.getAll();
-        for(int i=0;i<st.size();i++){
-          statusList.add(st.get(i));
+        List<statusmodel> st = statusmodel.getAll();
+        for (int i = 0; i < st.size(); i++) {
+            statusList.add(st.get(i));
         }
 
 
         m_adapter.notifyDataSetChanged();
 
-        Log.d("jumlahlist",String.valueOf(statusList.size()));
+        Log.d("jumlahlist", String.valueOf(statusList.size()));
 
-        Button reload= (Button) findViewById(R.id.reloadbtn);
+        Button reload = (Button) findViewById(R.id.reloadbtn);
         reload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,10 +106,80 @@ public class LangitPagesActivity extends Activity {
                         HttpMethod.GET,
                         graphcallback
                 ).executeAsync();
+
+
+                    pp.setMessage("Loading...");
+                    pp.show();
+
             }
         });
 
+
+        Button reloadretro = (Button) findViewById(R.id.reloadretro);
+        reloadretro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //request with retrofit
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .setLog(new AndroidLog("YOUR_LOG_TAG"))
+                        .setEndpoint(GRAPHURL).build();
+
+                fbAPI fbapi = restAdapter.create(fbAPI.class);
+
+                fbapi.getStatus(AccessToken.getCurrentAccessToken().getToken(), "177321525623964", fbcallback);
+                Log.d("retrofit", "requesting status via retrofit");
+                Log.d("retrofit", AccessToken.getCurrentAccessToken().getToken());
+
+                pp.setMessage("Loading Retrofit...");
+                pp.show();
+            }
+
+        });
     }
+
+
+
+
+
+private Callback<data> fbcallback = new Callback<data>() {
+    @Override
+    public void success(data data, Response response) {
+
+        if(pp!=null && pp.isShowing())
+            pp.dismiss();
+
+        Log.d("retrofit respon", String.valueOf(data.getData().size()));
+        List<statusmodel> list = data.getData();
+
+
+
+        if (list != null)
+            statusmodel.Clean();
+            statusList.clear();
+
+            for (int i = 0; i < list.size(); i++) {
+
+                    statusmodel st;
+                    st = list.get(i);
+
+
+                    st.setName(st.getFrom().getName());
+                    st.setPpimage("https://graph.facebook.com/" + st.getFrom().getId() + "/picture?width=96&height=96");
+                    st.setOrdinal(i);
+                    Runnable r = new saveThread(st);
+                    new Thread(r).start();
+
+            }
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+        if(pp!=null && pp.isShowing())
+            pp.dismiss();
+        Log.d("retrofit error",error.getMessage());
+    }
+};
 
 
 
@@ -101,7 +187,8 @@ private GraphRequest.Callback graphcallback = new GraphRequest.Callback() {
     @Override
     public void onCompleted(GraphResponse graphResponse) {
 
-
+        if(pp!=null && pp.isShowing())
+            pp.dismiss();
 
         if(graphResponse.getError()==null) {
             statusmodel.Clean();
@@ -193,9 +280,11 @@ private GraphRequest.Callback graphcallback = new GraphRequest.Callback() {
             final statusmodel o = items.get(position);
             if (o != null) {
                 final ImageView iv = (ImageView) v.findViewById(R.id.ppimg);
+                final ImageView ivf = (ImageView) v.findViewById(R.id.imgfoto);
                 TextView name = (TextView) v.findViewById(R.id.nametext);
                 TextView datetime = (TextView) v.findViewById(R.id.datetimetext);
                 TextView status = (TextView) v.findViewById(R.id.statustext);
+
 
                 LinearLayout ll = (LinearLayout) v.findViewById(R.id.ll);
                 name.setTextSize(14);
@@ -212,9 +301,16 @@ private GraphRequest.Callback graphcallback = new GraphRequest.Callback() {
                 int id;
 
 
+
                 try {
                     Bitmap bmp = toBitmap(o.getPpimage());
                     iv.setImageBitmap(bmp);
+
+                    Bitmap bmp2 = toBitmap(o.getPicture());
+                    ivf.setImageBitmap(bmp2);
+                    ivf.getLayoutParams().height=600;
+                    ivf.getLayoutParams().width=600;
+                    ivf.requestLayout();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -257,12 +353,15 @@ private GraphRequest.Callback graphcallback = new GraphRequest.Callback() {
                 URL url = new URL(mm.getPpimage());
                 final Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
+                URL url2 = new URL(mm.getPicture());
+                final Bitmap bmp2 = BitmapFactory.decodeStream(url2.openConnection().getInputStream());
 
                 hand.post(new Runnable() {
                     @Override
                     public void run() {
 
                         mm.setPpimage(toBase64(bmp));
+                        mm.setPicture(toBase64(bmp2));
                         mm.save();
 
                         statusList.clear();
@@ -270,7 +369,6 @@ private GraphRequest.Callback graphcallback = new GraphRequest.Callback() {
                         for(int i=0;i<sts.size();i++){
                             statusList.add(sts.get(i));
                         }
-                        Log.d("JUMLAH",String.valueOf(statusList.size()));
                         m_adapter.notifyDataSetChanged();
                     }
                 });

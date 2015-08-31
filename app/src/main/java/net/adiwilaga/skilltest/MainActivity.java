@@ -2,28 +2,11 @@ package net.adiwilaga.skilltest;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.activeandroid.ActiveAndroid;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
-import net.adiwilaga.skilltest.api.apitv;
-import net.adiwilaga.skilltest.model.statusmodel;
-import net.adiwilaga.skilltest.model.tv;
-
-import java.util.List;
 
 public class MainActivity extends Activity {
 

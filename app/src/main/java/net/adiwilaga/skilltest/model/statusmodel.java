@@ -16,6 +16,8 @@ import java.util.List;
 @Table(name = "tlstatus")
 public class statusmodel extends Model {
 
+    @Expose
+    private from from;
 
     @Expose
     @Column(name = "name")
@@ -33,6 +35,11 @@ public class statusmodel extends Model {
     @SerializedName("message")
     @Column(name = "status")
     private String status;
+
+
+    @Expose
+    @Column(name = "picture")
+    private String picture;
 
     @Column(name = "ordinal")
     private int ordinal;
@@ -93,6 +100,22 @@ public class statusmodel extends Model {
 
     public void setOrdinal(int ordinal) {
         this.ordinal = ordinal;
+    }
+
+    public net.adiwilaga.skilltest.model.from getFrom() {
+        return from;
+    }
+
+    public void setFrom(net.adiwilaga.skilltest.model.from from) {
+        this.from = from;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }
 
